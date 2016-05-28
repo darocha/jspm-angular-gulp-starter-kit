@@ -48,11 +48,11 @@ gulp.task('serveProd', ['build'], function(){
 
 gulp.task('build', [
   'setProdVariables',
-  'clean',
+  'cleanWin',
   'sass',
   'templates',
   'render',
-  'buildjs'
+  'bundle'
 ]);
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -81,6 +81,10 @@ gulp.task('clean', function () {
       console.log('clean complete');
     }
   });
+});
+
+gulp.task('cleanWin', function () {
+  exec('rimraf dist');
 });
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -114,6 +118,26 @@ gulp.task('buildjs', function(){
       console.log('buildjs complete');
     }
   });
+});
+
+////////////////////////////////////////////////////////////////////////////////
+
+// Bundle the js using jspm, see package.json for the buildjs cmd
+// Creates a file dist/build.js containing src/main and all its dependencies
+// referenced in config.js.
+
+// jspm bundle src/main dist/main-bundle.js --inject
+// jspm bundle src/main dist/build.js
+// jspm bundle-sfx src/main.js app.js
+
+////////////////////////////////////////////////////////////////////////////////
+
+gulp.task('bundle', function() {
+  exec('jspm bundle src/main dist/build.js');
+});
+
+gulp.task('bundle-sfx', function() {
+  exec('jspm bundle src/main.js dist/build.js');
 });
 
 ////////////////////////////////////////////////////////////////////////////////
